@@ -53,7 +53,7 @@ class ObjectController(server.ObjectController):
                                              container, obj, **kwargs)
 
     def async_update(self, op, account, container, obj, host, partition,
-                     contdevice, headers_out, objdevice):
+                     contdevice, headers_out, objdevice, policy_idx):
         """
         Sends or saves an async update.
 
