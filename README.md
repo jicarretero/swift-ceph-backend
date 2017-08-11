@@ -1,7 +1,7 @@
 Ceph object server backend for OpenStack Swift
 ==============================================
 
-These are some changes I made in order to make this work with my version of Ceph (0.94) and Swift (Juno). I haven't tested this in any other distribution.
+These are some changes I made in order to make this work with my version of Ceph (0.94) and Swift (Juno). This version does also work for Openstack Kilo. Unfortunately it doesn't work in Liberty version.
 
 Remind the base project is:  https://github.com/stackforge/swift-ceph-backend and the changes I made aren't expected to work anywhere but on my own installation. Feel free to use it on your own risk, but no liability will be accepted for any use of this software.
 
