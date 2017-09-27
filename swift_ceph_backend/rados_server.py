@@ -53,7 +53,8 @@ class ObjectController(server.ObjectController):
                                              container, obj, **kwargs)
 
     def async_update(self, op, account, container, obj, host, partition,
-                     contdevice, headers_out, objdevice, policy_idx):
+                     contdevice, headers_out, objdevice, policy_idx,
+                     logger_thread_locals=None):
         """
         Sends or saves an async update.
 
@@ -68,6 +69,7 @@ class ObjectController(server.ObjectController):
                             request
         :param objdevice: device name that the object is in
         """
+        self.logger.info(_('KRT_AGENT - async_update'))
         headers_out['user-agent'] = 'obj-server %s' % os.getpid()
         full_path = '/%s/%s/%s' % (account, container, obj)
         if all([host, partition, contdevice]):

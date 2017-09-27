@@ -23,6 +23,8 @@ from eventlet import Timeout
 import time
 
 from swift.common.utils import normalize_timestamp
+from swift.common.utils import Timestamp
+
 from swift.common.exceptions import DiskFileQuarantined, DiskFileNotExist, \
     DiskFileCollision, DiskFileDeleted, DiskFileNotOpen, DiskFileNoSpace, \
     DiskFileError
@@ -168,6 +170,17 @@ class DiskFileWriter(object):
         """
         metadata['name'] = self._name
         self._fs.put_object(self._name, metadata)
+
+    def commit(self, timestamp):
+        """
+        Perform any operations necessary to mark the object as durable. For
+        mem_diskfile type this is a no-op.
+
+        :param timestamp: object put timestamp, an instance of
+                          :class:`~swift.common.utils.Timestamp`
+        """
+        pass
+
 
 
 class DiskFileReader(object):
@@ -465,7 +478,8 @@ class DiskFile(object):
         """
         fs_inst = None
         try:
-            timestamp = normalize_timestamp(timestamp)
+            #timestamp = normalize_timestamp(timestamp)
+            timestamp = Timestamp(timestamp)
             fs_inst = self._fs.open()
             md = fs_inst.get_metadata(self._name)
             if md and md['X-Timestamp'] < timestamp:
@@ -473,3 +487,12 @@ class DiskFile(object):
         finally:
             if fs_inst is not None:
                 fs_inst.close()
+
+    @property
+    def timestamp(self):
+        if self._metadata is None:
+            raise DiskFileNotOpen()
+        return Timestamp(self._metadata.get('X-Timestamp'))
+
+    data_timestamp = timestamp
+
